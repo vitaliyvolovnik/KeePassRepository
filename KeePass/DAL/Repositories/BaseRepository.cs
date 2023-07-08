@@ -13,7 +13,7 @@ namespace DAL.Repositories
     public class BaseRepository<T> : IRepository<T> where T : class
     {
 
-        private readonly KeyPassContext _keyPassContext;
+        protected readonly KeyPassContext _keyPassContext;
 
 
         public BaseRepository(KeyPassContext keyPassContext)
@@ -52,7 +52,7 @@ namespace DAL.Repositories
             => await Entities
                 .FirstOrDefaultAsync(predicate);
 
-        public async Task<IEnumerable<T>> GetAllAsync()=> await Entities.ToListAsync();
+        public async Task<IEnumerable<T>> GetAllAsync() => await Entities.ToListAsync();
 
         public async Task DeleteAsync(Expression<Func<T, bool>> predicate)
         {
