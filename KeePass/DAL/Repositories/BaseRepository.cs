@@ -59,7 +59,12 @@ namespace DAL.Repositories
             Entities.RemoveRange(Entities.Where(predicate));
             await this.SaveChangesAsync();
         }
-
+        
+        public async Task DeleteAllAsync()
+        {
+            Entities.RemoveRange(Entities);
+            await this.SaveChangesAsync();
+        }
         public async Task SaveChangesAsync()
         {
             await _keyPassContext.SaveChangesAsync();

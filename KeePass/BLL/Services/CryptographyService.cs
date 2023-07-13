@@ -15,7 +15,7 @@ namespace BLL.Services
             aes = Aes.Create();
             aes.KeySize = 256;
             aes.Mode = CipherMode.CBC;
-            aes.Key = Encoding.UTF8.GetBytes(aesKey);
+            //aes.Key = Encoding.UTF8.GetBytes(aesKey);
         }
 
         public string Encrypt(string plaintext)

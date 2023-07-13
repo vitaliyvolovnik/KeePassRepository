@@ -17,7 +17,7 @@ namespace BLL.Infrastructure
 
         public static void Configure(ServiceCollection collection, string connectionString)
         {
-            collection.AddDbContext<KeyPassContext>(x => x.UseSqlServer(connectionString));
+            collection.AddDbContext<KeyPassContext>(x => x.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=KeyPassDb;Integrated Security=True;Connect Timeout=30;Encrypt=False"));
 
             //repositories
             collection.AddTransient<UserRepository>();

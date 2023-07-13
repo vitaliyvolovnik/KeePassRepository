@@ -45,6 +45,8 @@ namespace BLL.Services
 
         public async Task<Folder?> GetFolderAsync(int id) => await _folderRepository.FindFirstAsync(x => x.Id == id);
 
+        public Task<IEnumerable<Collection>> GetByFolderIdAsync(int folderId)=> _collectionRepository.FindByConditionAsync(x => x.FolderId == folderId);
+
         public async Task<Collection?> RenameCollectionAsync(int id, string newName)
         {
             return await _collectionRepository.UpdateAsync(id, new Collection()

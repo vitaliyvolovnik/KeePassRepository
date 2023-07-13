@@ -1,4 +1,5 @@
 ﻿using DAL.Context;
+using DAL.Repositories.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class UserRepository : BaseRepository<User>
+    public class UserRepository : BaseRepository<User>,UpdateEntity<User>
     {
         public UserRepository(KeyPassContext keyPassContext) : base(keyPassContext)
         {
@@ -21,9 +22,17 @@ namespace DAL.Repositories
         }
 
 
-        public async Task<User?> ChangePassword()
+        public async Task<User?> UpdateAsync(int id, User entity)
         {
-            throw new NotImplementedException();
+            var user = await Entities.FirstOrDefaultAsync(x => x.Id == id);
+            if (user == null) return null;
+
+            if (!string.IsNullOrWhiteSpace(entity.MasterPassword))
+                user.MasterPassword = entity.MasterPassword;
+
+            _keyPassContext.Entry(user).State = EntityState.Modified;
+            await SaveChangesAsync();
+            return user;
         }
     }
 }

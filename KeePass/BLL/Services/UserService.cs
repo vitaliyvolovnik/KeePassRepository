@@ -18,7 +18,7 @@ namespace BLL.Services
 
         public Task<User?> ChangePassword(int userId, string newPassword)
         {
-            throw new NotImplementedException();
+            return _userRepository.UpdateAsync(userId,new User() { MasterPassword = _cryptographyService.HashPassword(newPassword)});
         }
 
         public async Task<User?> LoginAsync(string password)
@@ -29,11 +29,15 @@ namespace BLL.Services
 
         public async Task<User?> RegisterAsync(string password)
         {
-            var hashedPass = _cryptographyService.HashPassword(password);
-            return await _userRepository.CreateAsync(new User
+            if(! await _userRepository.isRegistered())
             {
-                MasterPassword = hashedPass
-            });
+                var hashedPass = _cryptographyService.HashPassword(password);
+                return await _userRepository.CreateAsync(new User
+                {
+                    MasterPassword = hashedPass
+                });
+            }
+            return null;
         }
     }
 }

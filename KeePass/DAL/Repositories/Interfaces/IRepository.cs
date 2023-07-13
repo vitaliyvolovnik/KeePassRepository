@@ -14,6 +14,7 @@ namespace DAL.Repositories.Interfaces
         
         public Task<T?> CreateAsync(T entity);
         public Task DeleteAsync(Expression<Func<T, bool>> predicate);
+        public Task DeleteAllAsync();
 
 
 

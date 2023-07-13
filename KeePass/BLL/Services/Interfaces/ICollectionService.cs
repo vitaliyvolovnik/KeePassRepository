@@ -9,6 +9,7 @@ namespace BLL.Services.Interfaces
 
         Task<Collection?> GetCollectionAsync(int id);
         Task<IEnumerable<Collection>> GetAllCollectionAsync();
+        Task<IEnumerable<Collection>> GetByFolderIdAsync(int folderId);
 
         Task DeleteCollectionAsync(int id);
         Task<Collection?> RenameCollectionAsync(int id, string newName);
