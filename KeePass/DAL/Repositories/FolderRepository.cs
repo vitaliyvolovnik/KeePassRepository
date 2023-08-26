@@ -35,5 +35,12 @@ namespace DAL.Repositories
             return await Entities.AnyAsync(x => x.Name == name);
         }
 
+        public override async Task<IEnumerable<Folder>> GetAllAsync()
+        {
+            return await Entities
+                .Include(x=>x.Collections)
+                .ToListAsync();
+        }
+
     }
 }

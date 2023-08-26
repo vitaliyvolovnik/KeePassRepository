@@ -10,11 +10,11 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <!-- primary -->
-            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#744ce0"/>
+            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#ffd100"/>
             <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="#FFFFFF"/>
-            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#6134D9"/>
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#ffd100"/>
             <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="#FFFFFF"/>
-            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#4D1DCF"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#ffd100"/>
             <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="#FFFFFF"/>
             <!-- accent -->
             <SolidColorBrush x:Key="SecondaryHueMidBrush" Color="#5C5B5E"/>

@@ -16,7 +16,7 @@ namespace DAL.Repositories
         {
         }
 
-        public async Task<bool> isRegistered()
+        public async Task<bool> isRegisteredAsync()
         {
             return (await Entities.CountAsync()) == 1;
         }

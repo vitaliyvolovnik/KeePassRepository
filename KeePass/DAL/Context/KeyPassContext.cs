@@ -10,8 +10,6 @@ namespace DAL.Context
         public KeyPassContext(DbContextOptions<KeyPassContext> dbContextOptions):
             base(dbContextOptions)
         { 
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
         }
 
 

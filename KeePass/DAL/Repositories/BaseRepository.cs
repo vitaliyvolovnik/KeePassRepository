@@ -26,7 +26,7 @@ namespace DAL.Repositories
 
 
 
-        public async Task<T?> CreateAsync(T entity)
+        public virtual async Task<T?> CreateAsync(T entity)
         {
             try
             {
@@ -41,26 +41,26 @@ namespace DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> predicate)
+        public virtual async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> predicate)
         {
             return await Entities
                 .Where(predicate)
                 .ToListAsync();
         }
 
-        public async Task<T?> FindFirstAsync(Expression<Func<T, bool>> predicate)
+        public virtual async Task<T?> FindFirstAsync(Expression<Func<T, bool>> predicate)
             => await Entities
                 .FirstOrDefaultAsync(predicate);
 
-        public async Task<IEnumerable<T>> GetAllAsync() => await Entities.ToListAsync();
+        public virtual async Task<IEnumerable<T>> GetAllAsync() => await Entities.ToListAsync();
 
-        public async Task DeleteAsync(Expression<Func<T, bool>> predicate)
+        public virtual async Task DeleteAsync(Expression<Func<T, bool>> predicate)
         {
             Entities.RemoveRange(Entities.Where(predicate));
             await this.SaveChangesAsync();
         }
         
-        public async Task DeleteAllAsync()
+        public virtual async Task DeleteAllAsync()
         {
             Entities.RemoveRange(Entities);
             await this.SaveChangesAsync();

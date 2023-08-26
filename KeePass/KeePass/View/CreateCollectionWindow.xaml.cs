@@ -17,33 +17,32 @@ using System.Windows.Shapes;
 namespace KeePass.View
 {
     /// <summary>
-    /// Interaction logic for CreateFolderWindow.xaml
+    /// Interaction logic for CreateCollectionWindow.xaml
     /// </summary>
-    public partial class CreateFolderWindow : Window
+    public partial class CreateCollectionWindow : Window
     {
-
         public string? Name { get; private set; }
         public bool IsOk { get; private set; } = false;
 
-        public CreateFolderWindow()
+        public CreateCollectionWindow()
         {
             InitializeComponent();
 
-            CreateBtn.Command = new RelayCommand(CreateFolderExecute, CreateFoderCanExecute);
+            CreateBtn.Command = new RelayCommand(CreateCollectionExecute, CreateCollectionCanExecute);
 
         }
 
-        private bool CreateFoderCanExecute(object arg)
+        private bool CreateCollectionCanExecute(object arg)
         {
-            return Regex.IsMatch(FolderNameTextBox.Text, @"^[a-zA-Z0-9 .\-_]{2,50}$");
+            return Regex.IsMatch(CollectionNameTextBox.Text, @"^[a-zA-Z0-9 .\-_]{2,50}$");
         }
 
-        private void CreateFolderExecute(object arg)
+        private void CreateCollectionExecute(object arg)
         {
-            this.Name = FolderNameTextBox.Text;
+            this.Name = CollectionNameTextBox.Text;
 
             this.IsOk = true;
             this.Close();
-        } 
+        }
     }
 }

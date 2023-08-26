@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KeePass.ViewModel
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged, IDisposable
     {
         protected BaseViewModel()
         {
@@ -26,6 +26,13 @@ namespace KeePass.ViewModel
 
         }
 
-  
+        public void Dispose()
+        {
+            this.OnDispose();
+        }
+        public virtual void OnDispose()
+        {
+
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace BLL.Services
 
         public async Task<User?> RegisterAsync(string password)
         {
-            if(! await _userRepository.isRegistered())
+            if(! await _userRepository.isRegisteredAsync())
             {
                 var hashedPass = _cryptographyService.HashPassword(password);
                 return await _userRepository.CreateAsync(new User
@@ -38,6 +38,11 @@ namespace BLL.Services
                 });
             }
             return null;
+        }
+
+        public async Task<bool> isRegisteredAsync()
+        {
+            return await _userRepository.isRegisteredAsync();
         }
     }
 }

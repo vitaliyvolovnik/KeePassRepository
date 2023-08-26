@@ -1,38 +1,66 @@
 ﻿using BLL.Services;
 using Domain.Models;
 using KeePass.Core;
+using KeePass.Models;
 using KeePass.View;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace KeePass.ViewModel
 {
 
-    
-    public class ExplorerViewModel:BaseViewModel
+
+    public class ExplorerViewModel : BaseViewModel
     {
 
         private readonly FolderSerivce _folderService;
         private readonly User _currentUser;
+        
 
-        public ExplorerViewModel(FolderSerivce folderService,User currentUser)
+
+
+        public ExplorerViewModel(FolderSerivce folderService, User currentUser)
         {
             _folderService = folderService;
             _currentUser = currentUser;
+            Initialize();
         }
 
-        private List<Tuple<Folder,bool>> folders;
-        public List<Tuple<Folder,bool>> Folders
+        private ObservableCollection<ExplorerItem> folders;
+        public ObservableCollection<ExplorerItem> Folders
         {
-            get { return folders; }
-            set { folders = value; OnPropertyChanged("folders"); }
+            get { return folders ??= new(); }
+            set { folders = value; }
         }
 
+        private async Task Initialize()
+        {
+            (await _folderService.GetAllFoldersAsync()).Select(x => new ExplorerItem() { Folder = x, IsVisible = false }).ToList().ForEach(x => Folders.Add(x));
+        }
+
+
+
+        #region ChangeVisibility 
+
+        private ICommand changeFolderVisibility;
+
+        public ICommand ChangeFolderVisibility => changeFolderVisibility ??= new RelayCommand(ChangeVisibility);
+        
+        private void ChangeVisibility(object arg)
+        {
+            int id = (int)arg;
+            var item = this.Folders.First(x => x.Folder.Id == id);
+            item.IsVisible = !item.IsVisible;
+        }
+
+
+        #endregion
 
 
         #region ChangeCollection
@@ -43,20 +71,20 @@ namespace KeePass.ViewModel
 
         public event SellectCollection OnCollectionChanged
         {
-            add { onCollectionChanged += value ; }
-            remove { onCollectionChanged -= value ; }
+            add { onCollectionChanged += value; }
+            remove { onCollectionChanged -= value; }
         }
 
         private ICommand collectionChangeCommand;
 
         public ICommand CollectionChangeCommand
         {
-            get { return collectionChangeCommand ??=new AsyncRelayCommand(changeCollectionAsync); }
+            get { return collectionChangeCommand ??= new AsyncRelayCommand(changeCollectionAsync); }
         }
 
         async Task changeCollectionAsync(object obj)
         {
-            if(obj is Button button)
+            if (obj is Button button)
             {
                 var id = int.Parse(button.Tag.ToString());
 
@@ -69,7 +97,7 @@ namespace KeePass.ViewModel
 
         #region AddFolder
 
-        public ICommand addFolderCommand;
+        private ICommand addFolderCommand;
 
         public ICommand AddFolderCommand => addFolderCommand ??= new AsyncRelayCommand(AddFolder);
 
@@ -77,21 +105,20 @@ namespace KeePass.ViewModel
         {
             var createWind = new CreateFolderWindow();
 
-            var res = createWind.ShowDialog();
+            createWind.ShowDialog();
 
-            if (res == true)
+            if (createWind.IsOk)
             {
-                var created = await _folderService.AddAsync(new Folder() { Name = createWind.Name,UserId = _currentUser.Id});
+                var created = await _folderService.AddAsync(new Folder() { Name = createWind.Name, UserId = _currentUser.Id });
 
-                if(created != null)
+                if (created != null)
                 {
-                    this.folders.Add(new Tuple<Folder, bool>(created,false));
-                    OnPropertyChanged("folders");
+
+
+                    this.Folders.Add(new ExplorerItem() { Folder = created });
+
                 }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+
             }
         }
         #endregion
@@ -109,12 +136,12 @@ namespace KeePass.ViewModel
                 await _folderService.DeleteFolderAsync(id);
 
 
-                folders = new List<Tuple<Folder, bool>>();
+                folders = new ObservableCollection<ExplorerItem>();
                 var all = await _folderService.GetAllFoldersAsync();
                 foreach (var item in all)
-                    folders.Add(new Tuple<Folder, bool>(item, false));
+                    folders.Add(new ExplorerItem() { Folder = item });
 
-                OnPropertyChanged("folders");
+
             }
         }
         #endregion
@@ -126,34 +153,31 @@ namespace KeePass.ViewModel
 
         private async Task AddCollection(object obj)
         {
-            if (obj is Control control)
+            var id = int.Parse(obj.ToString());
+            var createWind = new CreateCollectionWindow();
+
+            createWind.ShowDialog();
+
+            if (createWind.IsOk)
             {
-                var id = int.Parse(control.Tag.ToString());
-                var createWind = new CreateFolderWindow();
+                var created = await _folderService.AddAsync(new Collection() { Name = createWind.Name, FolderId = id });
 
-                var res = createWind.ShowDialog();
-
-                if (res == true)
+                if (created != null)
                 {
-                    var created = await _folderService.AddAsync(new Collection() { Name = createWind.Name, FolderId = id });
-
-                    if (created != null)
-                    {
-                        folders.FirstOrDefault(x=>x.Item1.Id == id)?.Item1.Collections.Add(created);
-                        OnPropertyChanged("folders");
-                    }
-                    else
-                    {
-                        throw new NotImplementedException();
-                    }
+                    folders.FirstOrDefault(x => x.Folder.Id == id)?.Folder.Collections.Add(created);
+                    OnPropertyChanged("Folders");
+                }
+                else
+                {
+                    throw new NotImplementedException();
                 }
             }
-            
+
         }
 
         #endregion
 
-        #region
+        #region DelleteCollection
         public ICommand deleteCollectionCommand;
 
         public ICommand DeleteCollectionComand => deleteCollectionCommand ??= new AsyncRelayCommand(DeleteCollection);
@@ -169,9 +193,9 @@ namespace KeePass.ViewModel
 
                 var collecitons = await _folderService.GetByFolderIdAsync(folderId);
 
-                folders.FirstOrDefault(x => x.Item1.Id == folderId).Item1.Collections = collecitons.ToList();
+                folders.FirstOrDefault(x => x.Folder.Id == folderId).Folder.Collections = new ObservableCollection<Collection>(collecitons);
 
-                OnPropertyChanged("folders");
+                OnPropertyChanged("Folders");
             }
         }
         #endregion

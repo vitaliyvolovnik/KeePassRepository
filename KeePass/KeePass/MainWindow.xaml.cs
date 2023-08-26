@@ -1,8 +1,11 @@
 ﻿using BLL.Services;
+using Domain.Models;
+using KeePass.View;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,9 +25,32 @@ namespace KeePass
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(UserService user)
+        private User _currentUser;
+        public MainWindow(AuthorizeWindow window, ExplorerPage explorerPage,User currentUser)
         {
             InitializeComponent();
+
+            this._currentUser = currentUser;
+
+            Authorize(window);
+
+            ExplorerFrame.Navigate(explorerPage);
+        }
+
+
+        public void Authorize(AuthorizeWindow window)
+        {
+            window.ShowDialog();
+
+            if (window.IsOk)
+            {
+                _currentUser.Id = window.UserId;
+            }
+            else
+            {
+                MessageBox.Show("cannot work without autorization","authorize");
+                this.Close();
+            }
         }
 
     }

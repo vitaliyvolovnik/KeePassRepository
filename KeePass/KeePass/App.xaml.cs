@@ -1,6 +1,9 @@
 ﻿using BLL.Infrastructure;
 using BLL.Services;
 using BLL.Services.Interfaces;
+using KeePass.View;
+using KeePass.View.Pages;
+using KeePass.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -38,11 +41,17 @@ namespace KeePass
         {
             //Windows
             collection.AddTransient<MainWindow>();
+            collection.AddTransient<AuthorizeWindow>();
 
             //Pages
-
+            //collection.AddTransient<LoginPage>();
+            //collection.AddTransient<RegisterPage>();
+            collection.AddTransient<ExplorerPage>();
 
             //ViewModel
+            collection.AddTransient<CollectionViewModel>();
+            collection.AddTransient<ExplorerViewModel>();
+
 
 
             //Services

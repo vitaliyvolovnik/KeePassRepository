@@ -2,6 +2,7 @@
 using BLL.Services.Interfaces;
 using DAL.Context;
 using DAL.Repositories;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -17,13 +18,22 @@ namespace BLL.Infrastructure
 
         public static void Configure(ServiceCollection collection, string connectionString)
         {
-            collection.AddDbContext<KeyPassContext>(x => x.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=KeyPassDb;Integrated Security=True;Connect Timeout=30;Encrypt=False"));
+
+
+            var dbContextBuider = new DbContextOptionsBuilder<KeyPassContext>();
+            dbContextBuider.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=KeyPassDb;Integrated Security=True;Connect Timeout=30;Encrypt=False");
+
+            collection.AddTransient<KeyPassContext>();
+            collection.AddSingleton(dbContextBuider.Options);
 
             //repositories
             collection.AddTransient<UserRepository>();
             collection.AddTransient<FolderRepository>();
             collection.AddTransient<NoteRepository>();
             collection.AddTransient<CollectionRepository>();
+
+            //models
+            collection.AddSingleton<User>(new User());
 
 
         }
