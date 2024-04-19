@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class FolderRepository : BaseRepository<Folder>, UpdateEntity<Folder>
+    public class FolderRepository : BaseRepository<Folder>, IFolderRepository
     {
         public FolderRepository(KeyPassContext keyPassContext) : base(keyPassContext)
         { }
 
 
 
-        public async Task<Folder?> UpdateAsync(int id, Folder updateFolder)
+        public override async Task<Folder?> UpdateAsync(int id, Folder updateFolder)
         {
             var folder = await Entities.FirstOrDefaultAsync(x => x.Id == id);
             if (folder == null) return null;

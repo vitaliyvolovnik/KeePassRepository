@@ -62,14 +62,14 @@ namespace KeePass.ViewModel
 
         #endregion
 
-
         #region ChangeCollection
+        //TODO: set selected collection
         private Collection currentCollection;
 
-        public delegate void SellectCollection(int collectionId);
-        private event SellectCollection onCollectionChanged;
+        
+        private event Action<int> onCollectionChanged;
 
-        public event SellectCollection OnCollectionChanged
+        public event Action<int> OnCollectionChanged
         {
             add { onCollectionChanged += value; }
             remove { onCollectionChanged -= value; }
@@ -82,12 +82,12 @@ namespace KeePass.ViewModel
             get { return collectionChangeCommand ??= new AsyncRelayCommand(changeCollectionAsync); }
         }
 
-        async Task changeCollectionAsync(object obj)
+        private async Task changeCollectionAsync(object obj)
         {
-            if (obj is Button button)
-            {
-                var id = int.Parse(button.Tag.ToString());
+            var id = 0;
 
+            if (int.TryParse(obj.ToString(), out id))
+            {
 
                 await Task.Run(() => onCollectionChanged?.Invoke(id));
             }
@@ -113,10 +113,7 @@ namespace KeePass.ViewModel
 
                 if (created != null)
                 {
-
-
                     this.Folders.Add(new ExplorerItem() { Folder = created });
-
                 }
 
             }
@@ -135,13 +132,10 @@ namespace KeePass.ViewModel
                 var id = int.Parse(control.Tag.ToString());
                 await _folderService.DeleteFolderAsync(id);
 
-
                 folders = new ObservableCollection<ExplorerItem>();
                 var all = await _folderService.GetAllFoldersAsync();
                 foreach (var item in all)
                     folders.Add(new ExplorerItem() { Folder = item });
-
-
             }
         }
         #endregion
@@ -169,7 +163,7 @@ namespace KeePass.ViewModel
                 }
                 else
                 {
-                    throw new NotImplementedException();
+                    MessageBox.Show("Cant create collection");
                 }
             }
 

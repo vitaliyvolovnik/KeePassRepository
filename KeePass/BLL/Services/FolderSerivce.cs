@@ -1,5 +1,6 @@
 ﻿using BLL.Services.Interfaces;
 using DAL.Repositories;
+using DAL.Repositories.Interfaces;
 using Domain.Models;
 
 namespace BLL.Services
@@ -7,11 +8,11 @@ namespace BLL.Services
     public class FolderSerivce : IFolderService, ICollectionService
     {
 
-        private readonly FolderRepository _folderRepository;
-        private readonly CollectionRepository _collectionRepository;
+        private readonly IFolderRepository _folderRepository;
+        private readonly ICollectionRepository _collectionRepository;
 
 
-        public FolderSerivce(CollectionRepository collectionRepository, FolderRepository folderRepository)
+        public FolderSerivce(ICollectionRepository collectionRepository, IFolderRepository folderRepository)
         {
             _collectionRepository = collectionRepository;
             _folderRepository = folderRepository;
@@ -61,6 +62,11 @@ namespace BLL.Services
             {
                 Name = newName
             });
+        }
+
+        public async Task SaveAsync()
+        {
+            await _collectionRepository.SaveChangesAsync();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace DAL.Repositories
             {
                 var entry = _keyPassContext.Add(entity);
                 await this.SaveChangesAsync();
-                return entity;
+                return entry.Entity;
             }
             catch (Exception ex)
             {
@@ -68,6 +68,11 @@ namespace DAL.Repositories
         public async Task SaveChangesAsync()
         {
             await _keyPassContext.SaveChangesAsync();
+        }
+
+        public virtual Task<T?> UpdateAsync(int id, T entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

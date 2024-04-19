@@ -1,5 +1,6 @@
 ﻿using BLL.Services.Interfaces;
 using DAL.Repositories;
+using DAL.Repositories.Interfaces;
 using Domain.Models;
 
 namespace BLL.Services
@@ -7,10 +8,10 @@ namespace BLL.Services
     public class UserService : IUserService
     {
 
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly CryptographyService _cryptographyService;
 
-        public UserService(UserRepository userRepository, CryptographyService cryptographyService)
+        public UserService(IUserRepository userRepository, CryptographyService cryptographyService)
         {
             _userRepository = userRepository;
             _cryptographyService = cryptographyService;

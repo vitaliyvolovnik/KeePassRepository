@@ -2,6 +2,7 @@
 using BLL.Services.Interfaces;
 using DAL.Context;
 using DAL.Repositories;
+using DAL.Repositories.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,10 +28,10 @@ namespace BLL.Infrastructure
             collection.AddSingleton(dbContextBuider.Options);
 
             //repositories
-            collection.AddTransient<UserRepository>();
-            collection.AddTransient<FolderRepository>();
-            collection.AddTransient<NoteRepository>();
-            collection.AddTransient<CollectionRepository>();
+            collection.AddTransient<IUserRepository, UserRepository>();
+            collection.AddTransient<IFolderRepository, FolderRepository>();
+            collection.AddTransient<INoteRepository, NoteRepository>();
+            collection.AddTransient<ICollectionRepository, CollectionRepository>();
 
             //models
             collection.AddSingleton<User>(new User());

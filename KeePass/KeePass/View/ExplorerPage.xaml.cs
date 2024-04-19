@@ -33,8 +33,12 @@ namespace KeePass.View
             _viewModel = viewModel;
             this.DataContext = _viewModel;
 
-
-
         }
+
+        public void OnCollectionChangeSubscribe(Action<int> function)
+            => this._viewModel.OnCollectionChanged += function;
+
+        public void OnCollectionChangeUnsubscribe(Action<int> function)
+            => this._viewModel.OnCollectionChanged -= function;
     }
 }

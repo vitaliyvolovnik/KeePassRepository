@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class CollectionRepository : BaseRepository<Collection>, UpdateEntity<Collection>
+    public class CollectionRepository : BaseRepository<Collection>, ICollectionRepository
     {
         public CollectionRepository(KeyPassContext keyPassContext) : base(keyPassContext)
         {
         }
 
-        public async Task<Collection?> UpdateAsync(int id, Collection entity)
+        public override async Task<Collection?> UpdateAsync(int id, Collection entity)
         {
             var collection = await Entities.FirstOrDefaultAsync(x => x.Id == id);
             if (collection == null) return null;

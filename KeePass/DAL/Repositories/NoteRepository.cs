@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class NoteRepository : BaseRepository<Note>, UpdateEntity<Note>
+    public class NoteRepository : BaseRepository<Note>, INoteRepository
     {
         public NoteRepository(KeyPassContext keyPassContext) : base(keyPassContext)
         {
         }
 
-        public async Task<Note?> UpdateAsync(int id, Note entity)
+        public override async Task<Note?> UpdateAsync(int id, Note entity)
         {
             var note = await Entities.FirstOrDefaultAsync(x => x.Id == id);
             if (note == null) return null;

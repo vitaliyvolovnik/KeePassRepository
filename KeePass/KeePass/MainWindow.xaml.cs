@@ -1,6 +1,8 @@
 ﻿using BLL.Services;
 using Domain.Models;
 using KeePass.View;
+using KeePass.View.Pages;
+using KeePass.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -26,7 +28,7 @@ namespace KeePass
     public partial class MainWindow : Window
     {
         private User _currentUser;
-        public MainWindow(AuthorizeWindow window, ExplorerPage explorerPage,User currentUser)
+        public MainWindow(AuthorizeWindow window, ExplorerPage explorerPage, User currentUser, CollectionViewModel collectionViewModel)
         {
             InitializeComponent();
 
@@ -34,6 +36,9 @@ namespace KeePass
 
             Authorize(window);
 
+            explorerPage.OnCollectionChangeSubscribe(collectionViewModel.ChangeCollection);
+            
+            CollectionFrame.Navigate(new CollectionPage(collectionViewModel));
             ExplorerFrame.Navigate(explorerPage);
         }
 
@@ -48,10 +53,13 @@ namespace KeePass
             }
             else
             {
-                MessageBox.Show("cannot work without autorization","authorize");
+                MessageBox.Show("cannot work without autorization", "authorize");
                 this.Close();
             }
         }
+
+
+        
 
     }
 }

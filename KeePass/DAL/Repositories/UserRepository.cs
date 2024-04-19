@@ -2,15 +2,11 @@
 using DAL.Repositories.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DAL.Repositories
 {
-    public class UserRepository : BaseRepository<User>,UpdateEntity<User>
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(KeyPassContext keyPassContext) : base(keyPassContext)
         {
@@ -22,7 +18,7 @@ namespace DAL.Repositories
         }
 
 
-        public async Task<User?> UpdateAsync(int id, User entity)
+        public override async Task<User?> UpdateAsync(int id, User entity)
         {
             var user = await Entities.FirstOrDefaultAsync(x => x.Id == id);
             if (user == null) return null;

@@ -1,16 +1,17 @@
 ﻿using BLL.Services.Interfaces;
 using DAL.Repositories;
+using DAL.Repositories.Interfaces;
 using Domain.Models;
 
 namespace BLL.Services
 {
     public class NoteService : INoteService
     {
-        private readonly NoteRepository _noteRepository;
+        private readonly INoteRepository _noteRepository;
         private readonly CryptographyService _cryptographyService;
 
 
-        public NoteService(NoteRepository noteRepository, CryptographyService cryptography)
+        public NoteService(INoteRepository noteRepository, CryptographyService cryptography)
         {
             _noteRepository = noteRepository;
             _cryptographyService = cryptography;

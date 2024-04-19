@@ -73,23 +73,26 @@
         </Style>
     </Page.Resources>
 
+
     <ScrollViewer>
         <StackPanel VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <ListBox FontSize="18px" x:Name="ExplorerList" 
                  ItemsSource="{Binding Folders, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Stretch" >
-
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <Button Style="{x:Null}" Content="{Binding IsVisibleType, UpdateSourceTrigger=LostFocus}" Template="{StaticResource NoMouseOverButtonTemplate}"
+                        <StackPanel HorizontalAlignment="Stretch">
+                            <Button Style="{x:Null}" Content="{Binding Folder.Name}" Template="{StaticResource NoMouseOverButtonTemplate}"
                                 Background="Transparent" Foreground="#D6D6D6" BorderBrush="Transparent" 
                                 Command="{Binding ElementName=ExplorerList, Path=DataContext.ChangeFolderVisibility}" CommandParameter="{Binding Folder.Id}"/>
-                            <ListView Visibility="{Binding IsVisibleType, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Folder.Collections}">
-                                <ListView.ItemTemplate>
+                            <ListView Visibility="{Binding IsVisibleType, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemsSource="{Binding Folder.Collections}" Name="CollectionList">
+                                <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding Name}"></Label>
+                                        <Button Style="{x:Null}" Content="{Binding Name}" HorizontalAlignment="Stretch" Name="CollectionBtn"
+                                                Background="Transparent" Foreground="#D6D6D6" BorderBrush="Transparent"
+                                                Command="{Binding ElementName = ExplorerList, Path = DataContext.CollectionChangeCommand}" CommandParameter="{Binding Id}"></Button>
                                     </DataTemplate>
-                                </ListView.ItemTemplate>
+                                </ListBox.ItemTemplate>
                             </ListView>
                             <Button Style="{x:Null}" Template="{StaticResource NoMouseOverButtonTemplate}" 
                             Background="Transparent" Foreground="#D6D6D6" BorderBrush="Transparent" HorizontalAlignment="Left" 

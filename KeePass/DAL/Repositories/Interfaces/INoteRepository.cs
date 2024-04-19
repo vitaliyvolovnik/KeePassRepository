@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Interfaces
 {
-    public interface UpdateEntity<T>
+    public interface INoteRepository:IRepository<Note>
     {
-        Task<T?> UpdateAsync(int id, T entity);
     }
 }

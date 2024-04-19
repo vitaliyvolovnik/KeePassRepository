@@ -4,6 +4,7 @@ using DAL.Repositories;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.ObjectModel;
 
 namespace BLL.Testss
 {
@@ -145,7 +146,7 @@ namespace BLL.Testss
             {
                 UserId = currentUser.Id,
                 Name = name,
-                Collections = new List<Collection>(){
+                Collections = new ObservableCollection<Collection>(){
                     new Collection(){Name = "Collection 1"},
                     new Collection(){Name = "Collection 2"},
                     new Collection(){Name = "Collection 3"}
@@ -169,7 +170,7 @@ namespace BLL.Testss
             {
                 UserId = currentUser.Id,
                 Name = name,
-                Collections = new List<Collection>(){
+                Collections = new ObservableCollection<Collection>(){
                     new Collection(){Name = "Collection 1"},
                     new Collection(){Name = "Collection 2"},
                     new Collection(){Name = "Collection 3"}
