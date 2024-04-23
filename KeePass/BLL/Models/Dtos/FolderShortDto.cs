@@ -12,9 +12,12 @@ namespace BLL.Models.Dtos
         public int Id { get; set; }
         public string? Name { get; set; }
 
+        public int UserId { get; set; }
+
         internal Folder ToEntity()
         {
-            return new Folder { Id = Id, Name = Name };
+            return new Folder { Id = Id, Name = Name, UserId = UserId };
+
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using BLL.Services.Interfaces;
+﻿using BLL.Extensions;
+using BLL.Models.Dtos;
+using BLL.Services.Interfaces;
 using DAL.Repositories;
 using DAL.Repositories.Interfaces;
 using Domain.Models;
@@ -17,10 +19,10 @@ namespace BLL.Services
             _cryptographyService = cryptography;
         }
 
-        public async Task<Note?> AddAsync(Note note)
+        public async Task<NoteDto?> AddAsync(NoteDto note)
         {
-            note.Password = _cryptographyService.Encrypt(note.Password);
-            return await _noteRepository.CreateAsync(note);
+            var dto = await _noteRepository.CreateAsync(note.ToEntity());
+            return dto.ToDto(_cryptographyService);
         }
 
         public async Task ChangeNoteNameAsync(int id, string newName)
@@ -39,14 +41,14 @@ namespace BLL.Services
             await _noteRepository.DeleteAsync(x => x.Id == id);
         }
 
-        public async Task<IEnumerable<Note>> GetByCollectionIdAsync(int collectionId)
+        public async Task<IEnumerable<NoteDto>> GetByCollectionIdAsync(int collectionId)
         {
-            return await _noteRepository.FindByConditionAsync(x => x.CollectionId == collectionId);
+            return (await _noteRepository.FindByConditionAsync(x => x.CollectionId == collectionId)).Select(x=>x.ToDto(_cryptographyService));
         }
 
-        public async Task<Note?> GetNoteAsync(int id)
+        public async Task<NoteDto?> GetNoteAsync(int id)
         {
-            return await _noteRepository.FindFirstAsync(x => x.Id == id);
+            return (await _noteRepository.FindFirstAsync(x => x.Id == id))?.ToDto(_cryptographyService);
         }
     }
 }

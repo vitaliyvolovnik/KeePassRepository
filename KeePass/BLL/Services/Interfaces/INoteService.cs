@@ -1,13 +1,14 @@
-﻿using Domain.Models;
+﻿using BLL.Models.Dtos;
+using Domain.Models;
 
 namespace BLL.Services.Interfaces
 {
     public interface INoteService
     {
-        Task<Note?> AddAsync(Note note);
+        Task<NoteDto?> AddAsync(NoteDto note);
 
-        Task<Note?> GetNoteAsync(int id);
-        Task<IEnumerable<Note>> GetByCollectionIdAsync(int collectionId);
+        Task<NoteDto?> GetNoteAsync(int id);
+        Task<IEnumerable<NoteDto>> GetByCollectionIdAsync(int collectionId);
 
         Task ChangeNoteNameAsync(int id, string newName);
         Task ChangeNotePassword(int id, string newPassword);

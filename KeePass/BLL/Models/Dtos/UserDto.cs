@@ -22,7 +22,7 @@ namespace BLL.Models.Dtos
             {
                 Id = Id,
                 MasterPassword = MasterPassword,
-                Folders = Folders.Select(x => x.ToEnitty()).ToList(),
+                Folders = Folders?.Select(x => x.ToEnitty()).ToList(),
             };
             
         }

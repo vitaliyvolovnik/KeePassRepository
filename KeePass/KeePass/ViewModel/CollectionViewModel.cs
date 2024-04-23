@@ -1,4 +1,5 @@
-﻿using BLL.Services;
+﻿using BLL.Models.Dtos;
+using BLL.Services;
 using Domain.Models;
 using KeePass.Core;
 using System;
@@ -21,10 +22,10 @@ namespace KeePass.ViewModel
             _folderSerivce = folderSerivce;
             _noteService = noteService;
         }
-        private Collection? currentCollection;
+        private CollectionDto? currentCollection;
 
 
-        public Collection? CurrentCollection
+        public CollectionDto? CurrentCollection
         {
             get { return currentCollection; }
         }

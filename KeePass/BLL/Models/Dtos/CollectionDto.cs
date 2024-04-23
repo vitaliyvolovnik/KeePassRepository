@@ -25,7 +25,7 @@ namespace BLL.Models.Dtos
                 Id = Id, 
                 Name = Name, 
                 Notes = new ObservableCollection<Note>(Notes.Select(x => x.ToEntity())), 
-                Folder = Folder.ToEntity(),
+                Folder = Folder?.ToEntity(),
                 FolderId = FolderId
             };
         }

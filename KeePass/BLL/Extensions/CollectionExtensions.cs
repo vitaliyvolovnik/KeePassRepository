@@ -14,6 +14,8 @@ namespace BLL.Extensions
     {
         public static CollectionDto ToDto(this Collection collection,CryptographyService cryptography)
         {
+            if (collection is null) return null;
+
             return new CollectionDto()
             {
                 Id = collection.Id,

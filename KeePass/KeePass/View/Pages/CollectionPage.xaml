@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:KeePass.View.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CollectionPage" Background="#333533">
@@ -16,71 +17,41 @@
         <Label  VerticalAlignment="Stretch" VerticalContentAlignment="Center"  Content="{Binding CurrentCollection.Name, UpdateSourceTrigger=PropertyChanged}"
                Foreground="#ffd100" FontWeight="Bold" FontSize="24px" Background="#2A2B2A">
         </Label>
-        <!--<Grid VerticalAlignment="Stretch" Grid.Row="1" Margin="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40px"></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30*"></ColumnDefinition>
-                    <ColumnDefinition Width="324*"></ColumnDefinition>
-                    <ColumnDefinition Width="324*"></ColumnDefinition>
-                    <ColumnDefinition Width="90*"></ColumnDefinition>
-                    <ColumnDefinition Width="17px"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40px"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Label Grid.Column="0" VerticalContentAlignment="Center" 
-                   Foreground="#D6D6D6" Background="#464746" >№</Label>
-                <Label Grid.Column="1" VerticalContentAlignment="Center" 
-                   Foreground="#D6D6D6" Background="#464746">Name</Label>
-                <Label Grid.Column="2" VerticalContentAlignment="Center" 
-                   Foreground="#D6D6D6" Background="#464746">Password</Label>
-                <Label Grid.Column="3" VerticalContentAlignment="Center" 
-                   Foreground="#D6D6D6" Background="#464746">Action</Label>
-                <Label Grid.Column="4" VerticalContentAlignment="Center" 
-                    Foreground="#D6D6D6" Background="#464746"></Label>
-            </Grid>
-            <ScrollViewer Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="4">
-                <StackPanel>
-                    <ListBox Padding="0px">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBoxItem Padding="0px">
-                            <Grid Height="20px">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="28*"></ColumnDefinition>
-                                    <ColumnDefinition Width="314*"></ColumnDefinition>
-                                    <ColumnDefinition Width="313*"></ColumnDefinition>
-                                    <ColumnDefinition Width="86*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                            </Grid>
-                        </ListBoxItem>
-                    </ListBox>
-
-                    <Button Style="{x:Null}" Background="Transparent" Foreground="#D6D6D6"
-                            BorderThickness="0" HorizontalAlignment="Left" FontSize="24px">+</Button>
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>-->
-        <DataGrid Grid.Row="1" ItemsSource="{Binding CurrentCollection.Notes}">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding CurrentCollection.Notes}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="All">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" ></DataGridTextColumn>
-                <DataGridTemplateColumn Header="Password">
+                <DataGridTextColumn Header="Id" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}"
+                                    EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"></DataGridTextColumn>
+                <DataGridTextColumn Width="30*" Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                                    EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
+                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="30*" Header="Password">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <PasswordBox Password="{Binding Password}"></PasswordBox>
+                            <PasswordBox></PasswordBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="20*" Header="Action">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                              IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                              Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                              ToolTip="MaterialDesignFloatingActionMiniLightButton" Height="20px" Width="20px">
+                              <materialDesign:PackIcon
+                                Width="15px"
+                                Height="15px"
+                                Kind="Alarm" />
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
             </DataGrid.Columns>
         </DataGrid>
+        
     </Grid>
 </Page>

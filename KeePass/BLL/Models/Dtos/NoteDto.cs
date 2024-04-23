@@ -22,7 +22,7 @@ namespace BLL.Models.Dtos
                 Id = Id,
                 Name = Name,
                 CollectionId = CollectionId,
-                Password = SecurePassword.PasswordHash
+                Password = SecurePassword?.PasswordHash
             };
         }
     }

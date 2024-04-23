@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using BLL.Models.Dtos;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +12,7 @@ namespace KeePass.Models
     public class ExplorerItem : INotifyPropertyChanged
     {
         private bool isVisible = false;
-        public Folder Folder { get; set; }
+        public FolderDto Folder { get; set; }
 
         public bool IsVisible
         {

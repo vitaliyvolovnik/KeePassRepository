@@ -1,15 +1,16 @@
-﻿using Domain.Models;
+﻿using BLL.Models.Dtos;
+using Domain.Models;
 
 namespace BLL.Services.Interfaces
 {
     public interface IFolderService
     {
 
-        Task<Folder?> AddAsync(Folder folder);
+        Task<FolderDto?> AddAsync(FolderDto folder);
 
         Task DeleteFolderAsync(int id);
-        Task<Folder?> GetFolderAsync(int id);
-        Task<IEnumerable<Folder>> GetAllFoldersAsync();
-        Task<Folder?> RenameFolderAsync(int id, string newName);
+        Task<FolderDto?> GetFolderAsync(int id);
+        Task<IEnumerable<FolderDto>> GetAllFoldersAsync();
+        Task<FolderDto?> RenameFolderAsync(int id, string newName);
     }
 }

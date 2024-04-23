@@ -1,4 +1,6 @@
-﻿using BLL.Services.Interfaces;
+﻿using BLL.Extensions;
+using BLL.Models.Dtos;
+using BLL.Services.Interfaces;
 using DAL.Repositories;
 using DAL.Repositories.Interfaces;
 using Domain.Models;
@@ -17,26 +19,28 @@ namespace BLL.Services
             _cryptographyService = cryptographyService;
         }
 
-        public Task<User?> ChangePassword(int userId, string newPassword)
+        public async Task<UserDto?> ChangePassword(int userId, string newPassword)
         {
-            return _userRepository.UpdateAsync(userId,new User() { MasterPassword = _cryptographyService.HashPassword(newPassword)});
+            var user = await _userRepository.UpdateAsync(userId,new User() { MasterPassword = _cryptographyService.HashPassword(newPassword)});
+            return user?.ToDto(_cryptographyService);
         }
 
-        public async Task<User?> LoginAsync(string password)
+        public async Task<UserDto?> LoginAsync(string password)
         {
             var hashedPass = _cryptographyService.HashPassword(password);
-            return await _userRepository.FindFirstAsync(x => x.MasterPassword == hashedPass);
+            return (await _userRepository.FindFirstAsync(x => x.MasterPassword == hashedPass))?.ToDto(_cryptographyService);
         }
 
-        public async Task<User?> RegisterAsync(string password)
+        public async Task<UserDto?> RegisterAsync(string password)
         {
             if(! await _userRepository.isRegisteredAsync())
             {
                 var hashedPass = _cryptographyService.HashPassword(password);
-                return await _userRepository.CreateAsync(new User
+                var user =  await _userRepository.CreateAsync(new User
                 {
                     MasterPassword = hashedPass
                 });
+                return user?.ToDto(_cryptographyService);
             }
             return null;
         }

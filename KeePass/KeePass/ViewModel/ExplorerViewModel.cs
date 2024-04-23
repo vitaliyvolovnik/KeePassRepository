@@ -1,8 +1,10 @@
-﻿using BLL.Services;
+﻿using BLL.Models.Dtos;
+using BLL.Services;
 using Domain.Models;
 using KeePass.Core;
 using KeePass.Models;
 using KeePass.View;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,35 +34,29 @@ namespace KeePass.ViewModel
             Initialize();
         }
 
-        private ObservableCollection<ExplorerItem> folders;
-        public ObservableCollection<ExplorerItem> Folders
+        private ObservableCollection<FolderDto> folders;
+        public ObservableCollection<FolderDto> Folders
         {
             get { return folders ??= new(); }
             set { folders = value; }
         }
 
+        private FolderDto selectedFolder;
+        public FolderDto SelectedFolder
+        {
+            get => selectedFolder;
+            set { selectedFolder = value; OnPropertyChanged(nameof(SelectedFolder)); }
+        }
+
+
         private async Task Initialize()
         {
-            (await _folderService.GetAllFoldersAsync()).Select(x => new ExplorerItem() { Folder = x, IsVisible = false }).ToList().ForEach(x => Folders.Add(x));
+            foreach (var item in await _folderService.GetAllFoldersAsync())
+            {
+                Folders.Add(item); 
+            };
         }
 
-
-
-        #region ChangeVisibility 
-
-        private ICommand changeFolderVisibility;
-
-        public ICommand ChangeFolderVisibility => changeFolderVisibility ??= new RelayCommand(ChangeVisibility);
-        
-        private void ChangeVisibility(object arg)
-        {
-            int id = (int)arg;
-            var item = this.Folders.First(x => x.Folder.Id == id);
-            item.IsVisible = !item.IsVisible;
-        }
-
-
-        #endregion
 
         #region ChangeCollection
         //TODO: set selected collection
@@ -84,12 +80,9 @@ namespace KeePass.ViewModel
 
         private async Task changeCollectionAsync(object obj)
         {
-            var id = 0;
-
-            if (int.TryParse(obj.ToString(), out id))
+            if(obj is CollectionDto colleciton)
             {
-
-                await Task.Run(() => onCollectionChanged?.Invoke(id));
+                await Task.Run(() => onCollectionChanged?.Invoke(colleciton.Id));
             }
         }
 
@@ -109,11 +102,11 @@ namespace KeePass.ViewModel
 
             if (createWind.IsOk)
             {
-                var created = await _folderService.AddAsync(new Folder() { Name = createWind.Name, UserId = _currentUser.Id });
+                var created = await _folderService.AddAsync(new FolderDto() { Name = createWind.Name, UserId = _currentUser.Id });
 
                 if (created != null)
                 {
-                    this.Folders.Add(new ExplorerItem() { Folder = created });
+                    this.Folders.Add(created);
                 }
 
             }
@@ -132,10 +125,10 @@ namespace KeePass.ViewModel
                 var id = int.Parse(control.Tag.ToString());
                 await _folderService.DeleteFolderAsync(id);
 
-                folders = new ObservableCollection<ExplorerItem>();
+                folders = new ObservableCollection<FolderDto>();
                 var all = await _folderService.GetAllFoldersAsync();
                 foreach (var item in all)
-                    folders.Add(new ExplorerItem() { Folder = item });
+                    folders.Add(item);
             }
         }
         #endregion
@@ -143,22 +136,27 @@ namespace KeePass.ViewModel
         #region AddCollection
         public ICommand addCollectionCommand;
 
-        public ICommand AddCollectionCommand => addCollectionCommand ??= new AsyncRelayCommand(AddCollection);
+        public ICommand AddCollectionCommand => addCollectionCommand ??= new AsyncRelayCommand(AddCollection,AddCollectionCanExecute);
+
+        private bool AddCollectionCanExecute(object arg)
+        {
+            return selectedFolder is not null;
+        }
 
         private async Task AddCollection(object obj)
         {
-            var id = int.Parse(obj.ToString());
+            
             var createWind = new CreateCollectionWindow();
 
             createWind.ShowDialog();
 
             if (createWind.IsOk)
             {
-                var created = await _folderService.AddAsync(new Collection() { Name = createWind.Name, FolderId = id });
+                var created = await _folderService.AddAsync(new CollectionDto() { Name = createWind.Name, FolderId = selectedFolder.Id });
 
                 if (created != null)
                 {
-                    folders.FirstOrDefault(x => x.Folder.Id == id)?.Folder.Collections.Add(created);
+                    selectedFolder.Collections?.Add(created);
                     OnPropertyChanged("Folders");
                 }
                 else
@@ -187,7 +185,7 @@ namespace KeePass.ViewModel
 
                 var collecitons = await _folderService.GetByFolderIdAsync(folderId);
 
-                folders.FirstOrDefault(x => x.Folder.Id == folderId).Folder.Collections = new ObservableCollection<Collection>(collecitons);
+                folders.FirstOrDefault(x => x.Id == folderId).Collections = new ObservableCollection<CollectionDto>(collecitons);
 
                 OnPropertyChanged("Folders");
             }

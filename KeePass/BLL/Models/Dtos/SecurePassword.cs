@@ -16,7 +16,7 @@ namespace BLL.Models.Dtos
             this._cryptographyService = cryptographyService;
         }
 
-        public string PasswordHash { set; get; }
+        public string PasswordHash { set; get; } = string.Empty;
 
 
         public string Password
