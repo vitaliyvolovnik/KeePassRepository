@@ -4,6 +4,7 @@ using BLL.Services.Interfaces;
 using DAL.Repositories;
 using DAL.Repositories.Interfaces;
 using Domain.Models;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BLL.Services
 {
@@ -49,6 +50,11 @@ namespace BLL.Services
         public async Task<NoteDto?> GetNoteAsync(int id)
         {
             return (await _noteRepository.FindFirstAsync(x => x.Id == id))?.ToDto(_cryptographyService);
+        }
+
+        public async Task<NoteDto?> UpdateAsync(NoteDto entity, int id)
+        {
+            return (await _noteRepository.UpdateAsync(id, entity.ToEntity()))?.ToDto(_cryptographyService);
         }
     }
 }

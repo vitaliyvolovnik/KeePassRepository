@@ -15,5 +15,7 @@ namespace BLL.Services.Interfaces
 
         Task DeleteNoteAsync(int id);
 
+        Task<NoteDto?> UpdateAsync(NoteDto entity, int id);
+
     }
 }

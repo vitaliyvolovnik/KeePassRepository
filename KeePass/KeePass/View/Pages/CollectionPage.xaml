@@ -13,20 +13,32 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60px"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="80px"></RowDefinition>
         </Grid.RowDefinitions>
         <Label  VerticalAlignment="Stretch" VerticalContentAlignment="Center"  Content="{Binding CurrentCollection.Name, UpdateSourceTrigger=PropertyChanged}"
-               Foreground="#ffd100" FontWeight="Bold" FontSize="24px" Background="#2A2B2A">
+               Foreground="#ffb47fff" FontWeight="Bold" FontSize="24px" Background="#2A2B2A">
         </Label>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding CurrentCollection.Notes}"
-                  AutoGenerateColumns="False"
-                  HeadersVisibility="All">
+        <DataGrid ItemsSource="{Binding CurrentCollection.Notes}" Grid.Row="1"
+                    AutoGenerateColumns="False"
+                    HeadersVisibility="All">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}"
-                                    EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
-                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"></DataGridTextColumn>
-                <DataGridTextColumn Width="30*" Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
-                                    EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"
-                                    ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="Id">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Id, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource MaterialDesignLabel}">
+                            </Label>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="30*" Header="Name">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource MaterialDesignTextBox}"></TextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="30*" Header="Password">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -37,21 +49,54 @@
                 <DataGridTemplateColumn Width="20*" Header="Action">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button
-                              IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                              Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                              ToolTip="MaterialDesignFloatingActionMiniLightButton" Height="20px" Width="20px">
-                              <materialDesign:PackIcon
-                                Width="15px"
-                                Height="15px"
-                                Kind="Alarm" />
-                            </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Name="ChangeBtn" Margin="0,0,5px,0"
+                       Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                       Height="30px" Width="30px">
+                                    <materialDesign:PackIcon
+                             Width="15px"
+                             Height="15px"
+                             Kind="Pencil" />
+                                </Button>
+                                <Button Name="SaveBtn" Margin="0,0,5px,0"
+                       Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                       Height="30px" Width="30px">
+                                    <materialDesign:PackIcon
+                             Width="15px"
+                             Height="15px"
+                             Kind="ContentSave" />
+                                </Button>
+                                <Button Name="DiscardChangesBtn" Margin="0,0,5px,0"
+                       Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                       Height="30px" Width="30px">
+                                    <materialDesign:PackIcon
+                             Width="15px"
+                             Height="15px"
+                             Kind="Undo" />
+                                </Button>
+                                <Button Name="DeleteBtn" 
+                       Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryDarkButton}"
+                       Height="30px" Width="30px">
+                                    <materialDesign:PackIcon
+                         Width="15px"
+                         Height="15px"
+                         Kind="Delete" />
+                                </Button>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
             </DataGrid.Columns>
         </DataGrid>
-        
+        <Button Name="SaveBtn" Margin="0,20px,20px,0" HorizontalAlignment="Right"
+                Command="{Binding AddNoteCommand}" Grid.Row="2"
+                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+                Height="50px" Width="50px">
+            <materialDesign:PackIcon
+             Width="30px"
+             Height="30px"
+             Kind="Plus" /> 
+        </Button>
     </Grid>
 </Page>

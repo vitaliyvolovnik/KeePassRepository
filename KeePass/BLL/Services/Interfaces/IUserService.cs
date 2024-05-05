@@ -11,5 +11,7 @@ namespace BLL.Services.Interfaces
 
 
         public Task<UserDto?> ChangePassword(int userId, string newPassword);
+
+        public Task<bool> IsRegisteredAsync();
     }
 }

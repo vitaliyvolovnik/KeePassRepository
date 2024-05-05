@@ -2,8 +2,9 @@
 using BLL.Services;
 using Domain.Models;
 using KeePass.Core;
-using KeePass.Models;
+using KeePass.Domain;
 using KeePass.View;
+using MaterialDesignThemes.Wpf;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Xml.XPath;
 
 namespace KeePass.ViewModel
 {
@@ -96,19 +98,22 @@ namespace KeePass.ViewModel
 
         private async Task AddFolder(object obj)
         {
-            var createWind = new CreateFolderWindow();
-
-            createWind.ShowDialog();
-
-            if (createWind.IsOk)
+            var viewModel = new AddNameDialogViewModel();
+            var dialog = new FolderCreateDialog()
             {
-                var created = await _folderService.AddAsync(new FolderDto() { Name = createWind.Name, UserId = _currentUser.Id });
+                DataContext = viewModel
+            };
+
+            var result = await DialogHost.Show(dialog, "RootDialog");
+
+            if (result is not null && (bool)result)
+            {
+                var created = await _folderService.AddAsync(new FolderDto() { Name = viewModel.Name, UserId = _currentUser.Id });
 
                 if (created != null)
                 {
                     this.Folders.Add(created);
                 }
-
             }
         }
         #endregion
@@ -117,7 +122,7 @@ namespace KeePass.ViewModel
         public ICommand deleteFolderCommand;
 
         public ICommand DeleteFolderComand => deleteFolderCommand ??= new AsyncRelayCommand(DeleteFolder);
-
+        //TODO: remove control from viewmodel
         private async Task DeleteFolder(object obj)
         {
             if (obj is Control control)
@@ -145,14 +150,18 @@ namespace KeePass.ViewModel
 
         private async Task AddCollection(object obj)
         {
-            
-            var createWind = new CreateCollectionWindow();
 
-            createWind.ShowDialog();
-
-            if (createWind.IsOk)
+            var vm = new AddNameDialogViewModel();
+            var dialog = new CollectionCreateDialog()
             {
-                var created = await _folderService.AddAsync(new CollectionDto() { Name = createWind.Name, FolderId = selectedFolder.Id });
+                DataContext = vm,
+            };
+
+            var result = await DialogHost.Show(dialog, "RootDialog");
+
+            if (result is not null && (bool)result)
+            {
+                var created = await _folderService.AddAsync(new CollectionDto() { Name = vm.Name, FolderId = selectedFolder.Id });
 
                 if (created != null)
                 {

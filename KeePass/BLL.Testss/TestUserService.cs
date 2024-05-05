@@ -22,7 +22,7 @@ namespace BLL.Testss
 
             KeyPassContext context = new(options);
             _userRepository = new UserRepository(context);
-            _cryptographyService = new CryptographyService("","");
+            _cryptographyService = new CryptographyService("",new User());
             _userService = new UserService(_userRepository, _cryptographyService);
             _userRepository.DeleteAllAsync();
         }

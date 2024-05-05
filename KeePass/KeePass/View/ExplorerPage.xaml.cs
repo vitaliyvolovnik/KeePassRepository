@@ -1,5 +1,4 @@
 ﻿using Domain.Models;
-using KeePass.Models;
 using KeePass.ViewModel;
 using System;
 using System.Collections.Generic;

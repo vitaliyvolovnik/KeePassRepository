@@ -37,15 +37,13 @@ namespace KeePass
             wind.Show();
 
         }
+
         private void ConfigureService(ServiceCollection collection)
         {
             //Windows
             collection.AddTransient<MainWindow>();
-            collection.AddTransient<AuthorizeWindow>();
 
             //Pages
-            //collection.AddTransient<LoginPage>();
-            //collection.AddTransient<RegisterPage>();
             collection.AddTransient<ExplorerPage>();
 
             //ViewModel
@@ -66,11 +64,10 @@ namespace KeePass
             collection.AddTransient<IUserService, UserService>();
 
 
-            string aesKey = ConfigurationManager.AppSettings["AES_KEY"];
             string salt = ConfigurationManager.AppSettings["PASSWORD_SALT"];
-            collection.AddTransient<CryptographyService>(sp => new CryptographyService(aesKey, salt));
+            
 
-            ConfigureBll.Configure(collection, ConfigurationManager.ConnectionStrings["MCSQLConnectionString"].ConnectionString);
+            ConfigureBll.Configure(collection, ConfigurationManager.ConnectionStrings["MCSQLConnectionString"].ConnectionString,salt);
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using BLL.Services;
+using BLL.Services.Interfaces;
 using Domain.Models;
+using KeePass.Domain;
 using KeePass.View;
 using KeePass.View.Pages;
 using KeePass.ViewModel;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -28,38 +31,81 @@ namespace KeePass
     public partial class MainWindow : Window
     {
         private User _currentUser;
-        public MainWindow(AuthorizeWindow window, ExplorerPage explorerPage, User currentUser, CollectionViewModel collectionViewModel)
+        private IUserService _userService;
+        public MainWindow(ExplorerPage explorerPage, User currentUser, CollectionViewModel collectionViewModel, IUserService userService)
         {
             InitializeComponent();
 
             this._currentUser = currentUser;
+            _userService = userService;
 
-            Authorize(window);
+            Initialize(explorerPage, collectionViewModel);
+
+
+        }
+
+        private async void Initialize(ExplorerPage explorerPage, CollectionViewModel collectionViewModel)
+        {
+            await Authorize();
 
             explorerPage.OnCollectionChangeSubscribe(collectionViewModel.ChangeCollection);
-            
+
             CollectionFrame.Navigate(new CollectionPage(collectionViewModel));
             ExplorerFrame.Navigate(explorerPage);
         }
-
-
-        public void Authorize(AuthorizeWindow window)
+        public async Task Authorize()
         {
-            window.ShowDialog();
 
-            if (window.IsOk)
+            bool isRegistered = await _userService.IsRegisteredAsync();
+            var result = false;
+            if (!isRegistered)
             {
-                _currentUser.Id = window.UserId;
+                var regDialog = new RegisterDialog();
+
+                result = false;
+
+                result = (bool)(await DialogHost.Show(regDialog, "RootDialog") ?? false);
+                if (!result)
+                {
+                    Close();
+                }
+                await _userService.RegisterAsync(regDialog.Password);
             }
-            else
+
+            var logDialog = new LoginControl();
+            result = false;
+            while (true)
             {
-                MessageBox.Show("cannot work without autorization", "authorize");
-                this.Close();
+                result = (bool)(await DialogHost.Show(logDialog, "RootDialog") ?? false);
+
+                if (!result)
+                {
+                    Close();
+                }
+                var user = await _userService.LoginAsync(logDialog.Password);
+
+                if (user is not null)
+                {
+                    _currentUser.MasterPassword = user.MasterPassword;
+                    _currentUser.Id = user.Id;
+
+                    break;
+                }
+
+                var infDialog = new InformationDialog();
+                infDialog.MessageTxt = "Entered incorrect password";
+
+                await DialogHost.Show(infDialog, "RootDialog");
+
             }
+
+
+
+
         }
 
 
-        
+
 
     }
 }

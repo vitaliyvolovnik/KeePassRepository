@@ -1,41 +1,68 @@
-﻿using System.Security.Cryptography;
+﻿using Domain.Models;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace BLL.Services
 {
     public class CryptographyService
     {
-        private readonly Aes aes;
+        private Aes? aes;
+        private Aes Aes
+        {
+            get
+            {
+                return aes ??= CreateAes();
+            }
+        }
         private readonly string SALT;
+        private readonly User _user;
 
-        public CryptographyService(string aesKey, string salt)
+        public CryptographyService(string salt, User user)
         {
             SALT = salt;
+            _user = user;
+        }
 
-            aes = Aes.Create();
+        private Aes CreateAes()
+        {
+            Rfc2898DeriveBytes passwordBytes = new Rfc2898DeriveBytes(_user.MasterPassword, 20);
+
+            var aes = Aes.Create();
             aes.KeySize = 256;
             aes.Mode = CipherMode.CBC;
-            //aes.Key = Encoding.UTF8.GetBytes(aesKey);
+            aes.Key = passwordBytes.GetBytes(32);
+
+            return aes;
         }
 
         public string Encrypt(string plaintext)
         {
-            using (ICryptoTransform encryptor = aes.CreateEncryptor())
+
+            byte[] planeTextBytes = Encoding.UTF8.GetBytes(plaintext);
+
+            using (MemoryStream ms = new MemoryStream())
             {
-                byte[] plaintextBytes = Encoding.UTF8.GetBytes(plaintext);
-                return Convert.ToBase64String(encryptor.TransformFinalBlock(plaintextBytes, 0, plaintextBytes.Length))  ;
+                using (CryptoStream cs = new CryptoStream(ms, Aes.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(planeTextBytes, 0, planeTextBytes.Length);
+                    return Convert.ToBase64String(ms.ToArray());
+                }
             }
         }
 
         public string Decrypt(string ciphertext)
-        {   
-            byte[] ciphertextBytes = Encoding.UTF8.GetBytes(ciphertext);
+        {
+            byte[] ciphertextBytes = Convert.FromBase64String(ciphertext);
 
-            using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+
+            using (MemoryStream ms = new MemoryStream())
             {
-                byte[] decryptedBytes = decryptor.TransformFinalBlock(ciphertextBytes, 0, ciphertext.Length);
-                return  Encoding.UTF8.GetString(decryptedBytes);
-            }
+                using (CryptoStream cs = new CryptoStream(ms, Aes.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(ciphertextBytes, 0, ciphertextBytes.Length);
+                    return Encoding.UTF8.GetString(ms.ToArray());
+                }
+            }     
         }
 
         public string HashPassword(string password)
@@ -43,12 +70,13 @@ namespace BLL.Services
             password += SALT;
             using (MD5 md5 = MD5.Create())
             {
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(password);
+                byte[] inputBytes = Encoding.ASCII.GetBytes(password);
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
 
-                return Convert.ToHexString(hashBytes); 
+                return Convert.ToHexString(hashBytes);
             }
         }
+
 
 
 

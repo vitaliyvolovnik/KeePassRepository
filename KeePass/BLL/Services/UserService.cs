@@ -45,7 +45,7 @@ namespace BLL.Services
             return null;
         }
 
-        public async Task<bool> isRegisteredAsync()
+        public async Task<bool> IsRegisteredAsync()
         {
             return await _userRepository.isRegisteredAsync();
         }
