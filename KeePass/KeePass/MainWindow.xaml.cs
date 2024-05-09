@@ -84,9 +84,12 @@ namespace KeePass
                 }
                 var user = await _userService.LoginAsync(logDialog.Password);
 
+                var cryptographyService = new CryptographyService("_jfjfjfj", null);
+
+
                 if (user is not null)
                 {
-                    _currentUser.MasterPassword = user.MasterPassword;
+                    _currentUser.MasterPassword = cryptographyService.HashPassword(logDialog.Password);
                     _currentUser.Id = user.Id;
 
                     break;

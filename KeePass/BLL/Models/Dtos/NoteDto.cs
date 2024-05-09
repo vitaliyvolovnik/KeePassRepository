@@ -21,7 +21,7 @@ namespace BLL.Models.Dtos
             set 
             { 
                 name = value;
-                isChanged = true;
+                IsChanged = true;
                 OnPropertyChanged(nameof(Name));
             }
         }
@@ -63,8 +63,15 @@ namespace BLL.Models.Dtos
             {
                 isPasswordChangingEnable = value;
                 OnPropertyChanged(nameof(IsPasswordChangingEnable));
+                OnPropertyChanged(nameof(IsChangingButtonEnable));
             }
         }
+        public bool IsChangingButtonEnable
+        {
+            get { return !isPasswordChangingEnable; }
+        }
+
+
 
         public Note ToEntity()
         {

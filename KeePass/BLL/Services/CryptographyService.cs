@@ -25,12 +25,13 @@ namespace BLL.Services
 
         private Aes CreateAes()
         {
-            Rfc2898DeriveBytes passwordBytes = new Rfc2898DeriveBytes(_user.MasterPassword, 20);
+            Rfc2898DeriveBytes passwordBytes = new Rfc2898DeriveBytes(_user.MasterPassword, Encoding.ASCII.GetBytes(this.SALT));
 
             var aes = Aes.Create();
             aes.KeySize = 256;
             aes.Mode = CipherMode.CBC;
             aes.Key = passwordBytes.GetBytes(32);
+            aes.IV = passwordBytes.GetBytes(16);
 
             return aes;
         }
@@ -45,8 +46,10 @@ namespace BLL.Services
                 using (CryptoStream cs = new CryptoStream(ms, Aes.CreateEncryptor(), CryptoStreamMode.Write))
                 {
                     cs.Write(planeTextBytes, 0, planeTextBytes.Length);
-                    return Convert.ToBase64String(ms.ToArray());
+                    
                 }
+                var txt = Convert.ToBase64String(ms.ToArray());
+                return txt;
             }
         }
 
@@ -60,8 +63,9 @@ namespace BLL.Services
                 using (CryptoStream cs = new CryptoStream(ms, Aes.CreateDecryptor(), CryptoStreamMode.Write))
                 {
                     cs.Write(ciphertextBytes, 0, ciphertextBytes.Length);
-                    return Encoding.UTF8.GetString(ms.ToArray());
+                    
                 }
+                return Encoding.UTF8.GetString(ms.ToArray());
             }     
         }
 
@@ -83,3 +87,5 @@ namespace BLL.Services
 
     }
 }
+
+

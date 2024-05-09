@@ -2,6 +2,7 @@
 using DAL.Repositories.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DAL.Repositories
 {
@@ -13,8 +14,15 @@ namespace DAL.Repositories
 
         public override async Task<Collection?> UpdateAsync(int id, Collection entity)
         {
-            var collection = await Entities.FirstOrDefaultAsync(x => x.Id == id);
-            if (collection == null) return null;
+            Collection collection;
+            try
+            {
+                collection = await Entities.FirstAsync(x => x.Id == id);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
             if (!string.IsNullOrWhiteSpace(entity.Name))
                 collection.Name = entity.Name;
@@ -22,6 +30,21 @@ namespace DAL.Repositories
             _keyPassContext.Entry(collection).State = EntityState.Modified;
             await SaveChangesAsync();
             return collection;
+        }
+
+        public override async Task<Collection?> FindFirstAsync(Expression<Func<Collection, bool>> predicate)
+        {
+            try
+            {
+                return await Entities
+                .Include(x => x.Notes)
+                .FirstAsync(predicate)
+                .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task<bool> IsExistAsync(string name)

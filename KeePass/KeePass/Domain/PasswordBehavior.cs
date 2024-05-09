@@ -5,19 +5,24 @@ using System.Windows.Controls;
 
 namespace KeePass.Domain
 {
-    class PasswordBehavior:Behavior<PasswordBox>
+    public class PasswordBehavior : Behavior<PasswordBox>
     {
 
-        public static DependencyProperty PasswordProp =
-            DependencyProperty.Register("Password", typeof(SecurePassword), typeof(PasswordBehavior));
-        
+        public static DependencyProperty SecurePasswordProperty =
+            DependencyProperty.Register("SecurePassword", typeof(SecurePassword), typeof(PasswordBehavior));
+
         private bool _skipUpdate;
 
-        public SecurePassword Password
+
+        public SecurePassword SecurePassword
         {
-            get { return (SecurePassword)GetValue(PasswordProp); }
-            set { SetValue(PasswordProp, value); }
+            get { return (SecurePassword)GetValue(SecurePasswordProperty); }
+            set { SetValue(SecurePasswordProperty, value); }
         }
+
+
+
+
 
         protected override void OnAttached()
         {
@@ -37,9 +42,9 @@ namespace KeePass.Domain
         {
             base.OnPropertyChanged(e);
 
-            if (e.Property == PasswordProp)
+            if (e.Property == SecurePasswordProperty)
             {
-                if (!_skipUpdate)
+                if (!_skipUpdate && AssociatedObject != null)
                 {
                     _skipUpdate = true;
                     AssociatedObject.Password = (e.NewValue as SecurePassword)?.Password;
@@ -51,7 +56,7 @@ namespace KeePass.Domain
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
             _skipUpdate = true;
-            Password.Password = AssociatedObject.Password as string;
+            SecurePassword.Password = AssociatedObject.Password as string;
             _skipUpdate = false;
         }
 

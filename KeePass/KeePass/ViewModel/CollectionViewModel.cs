@@ -17,11 +17,13 @@ namespace KeePass.ViewModel
     {
         private readonly FolderSerivce _folderSerivce;
         private readonly NoteService _noteService;
+        private readonly CryptographyService _cryptographyService;
 
-        public CollectionViewModel(FolderSerivce folderSerivce, NoteService noteService)
+        public CollectionViewModel(FolderSerivce folderSerivce, NoteService noteService, CryptographyService cryptography)
         {
             _folderSerivce = folderSerivce;
             _noteService = noteService;
+            _cryptographyService = cryptography;
         }
         private CollectionDto? currentCollection;
 
@@ -57,7 +59,10 @@ namespace KeePass.ViewModel
 
         private void AddNoteExecute(object obj)
         {
-            CurrentCollection.Notes.Add(new());
+            NoteDto note = new();
+            note.SecurePassword = new(_cryptographyService);
+            note.CollectionId = CurrentCollection?.Id;
+            CurrentCollection?.Notes?.Add(note);
         }
 
         #endregion
@@ -87,8 +92,7 @@ namespace KeePass.ViewModel
         private async Task SaveExecute(object arg)
         {
             var noteDto = (NoteDto)arg;
-            noteDto.IsPasswordChangingEnable = false;
-            noteDto.IsChanged = false;
+
             if (noteDto.Id == 0)
             {
                 var created = await _noteService.AddAsync(noteDto);
@@ -106,6 +110,8 @@ namespace KeePass.ViewModel
                     noteDto.SecurePassword = updated.SecurePassword;
                 }
             }
+            noteDto.IsPasswordChangingEnable = false;
+            noteDto.IsChanged = false;
         }
         #endregion
 
@@ -120,6 +126,7 @@ namespace KeePass.ViewModel
             if (noteDto != null)
             {
                 noteDto.SecurePassword.Password = "";
+                noteDto.IsChanged = true;
                 noteDto.IsPasswordChangingEnable = true;
             }
         }
