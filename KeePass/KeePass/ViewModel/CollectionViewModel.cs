@@ -109,6 +109,7 @@ namespace KeePass.ViewModel
                 if (updated != null)
                 {
                     noteDto.Name = updated.Name;
+                    updated.Login = updated.Login;
                     noteDto.SecurePassword = updated.SecurePassword;
                 }
             }
@@ -179,6 +180,7 @@ namespace KeePass.ViewModel
                 {
                     noteDto.SecurePassword = clearNote.SecurePassword;
                     noteDto.Name = clearNote.Name;
+                    noteDto.Login = clearNote.Login;
                     noteDto.IsChanged = false;
                     noteDto.IsPasswordChangingEnable = false;
                 }
@@ -187,7 +189,6 @@ namespace KeePass.ViewModel
 
 
         #endregion
-
 
         #region GenerateRandomPassword
 

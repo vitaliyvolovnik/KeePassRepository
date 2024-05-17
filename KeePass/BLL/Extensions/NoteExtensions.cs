@@ -13,6 +13,7 @@ namespace BLL.Extensions
                 Id = note.Id,
                 Name = note.Name,
                 CollectionId = note.CollectionId,
+                Login = note.Login,
                 SecurePassword = new SecurePassword(cryptographyService) { PasswordHash = note.Password },
             };
         }

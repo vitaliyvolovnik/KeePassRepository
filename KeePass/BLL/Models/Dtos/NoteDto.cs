@@ -7,7 +7,17 @@ namespace BLL.Models.Dtos
     {
         public int Id { get; set; }
 
-
+        private string? login;
+        public string? Login
+        {
+            get { return login; }
+            set
+            {
+                login = value;
+                IsChanged = true;
+                OnPropertyChanged(nameof(Login));
+            }
+        }
 
         private string? name;
         public string? Name
@@ -75,7 +85,8 @@ namespace BLL.Models.Dtos
                 Id = Id,
                 Name = Name,
                 CollectionId = CollectionId,
-                Password = SecurePassword?.PasswordHash
+                Password = SecurePassword?.PasswordHash,
+                Login = Login,
             };
         }
 

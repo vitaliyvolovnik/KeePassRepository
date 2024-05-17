@@ -24,6 +24,9 @@ namespace DAL.Repositories
             if (!string.IsNullOrWhiteSpace(entity.Name))
                 note.Name = entity.Name;
 
+            if (!string.IsNullOrWhiteSpace(entity.Login))
+                note.Login = entity.Login;
+
             if (!string.IsNullOrWhiteSpace(entity.Password))
                 note.Password = entity.Password;
 
