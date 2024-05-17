@@ -57,7 +57,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Button Name="ChangeBtn" Margin="0,0,5px,0"
+                                <Button Name="ChangeBtn" Margin="0,0,5px,0" ToolTip="Enable password changing"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                                     Height="30px" Width="30px"
                                     IsEnabled="{Binding IsChangingButtonEnable, UpdateSourceTrigger=PropertyChanged}"
@@ -68,7 +68,7 @@
                                          Height="15px"
                                          Kind="Pencil" />
                                 </Button>
-                                <Button Name="SaveBtn" Margin="0,0,5px,0"
+                                <Button Name="SaveBtn" Margin="0,0,5px,0" ToolTip="Save note"
                                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                                    Height="30px" Width="30px"
                                    IsEnabled="{Binding IsChanged, UpdateSourceTrigger=PropertyChanged}" 
@@ -79,7 +79,7 @@
                                          Height="15px"
                                          Kind="ContentSave" />
                                 </Button>
-                                <Button Name="DiscardChangesBtn" Margin="0,0,5px,0"
+                                <Button Name="DiscardChangesBtn" Margin="0,0,5px,0" ToolTip="Discard changes"
                                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                                    Height="30px" Width="30px"
                                    IsEnabled="{Binding IsChanged, UpdateSourceTrigger=PropertyChanged}"
@@ -90,7 +90,7 @@
                                          Height="15px"
                                          Kind="Undo" />
                                 </Button>
-                                <Button Name="DeleteBtn" Margin="0,0,5px,0"
+                                <Button Name="DeleteBtn" Margin="0,0,5px,0" ToolTip="Delete note"
                                    Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryDarkButton}"
                                    Height="30px" Width="30px">
                                     <materialDesign:PackIcon
@@ -98,15 +98,8 @@
                                          Height="15px"
                                          Kind="Delete" />
                                 </Button>
-                                <Button Name="GeneratePassword" Margin="0,0,5px,0"
-                                    Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                                    Height="30px" Width="30px">
-                                    <materialDesign:PackIcon
-                                      Width="15px"
-                                      Height="15px"
-                                      Kind="Refresh" />
-                                </Button>
-                                <Button Name="CopyToclipBoard" Margin="0,0,5px,0"
+                                
+                                <Button Name="CopyToclipBoard" Margin="0,0,5px,0" ToolTip="Copy password to clipboard"
                                         Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
                                         Height="30px" Width="30px"
                                         Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page},Mode=FindAncestor},Path=DataContext.CopyToClipBoardCommand}"
@@ -123,14 +116,28 @@
 
             </DataGrid.Columns>
         </DataGrid>
-        <Button Name="AddNoteBtn" Margin="0,20px,20px,0" HorizontalAlignment="Right"
-                Command="{Binding AddNoteCommand}" Grid.Row="2"
-                Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
-                Height="50px" Width="50px">
-            <materialDesign:PackIcon
-             Width="30px"
-             Height="30px"
-             Kind="Plus" />
-        </Button>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+
+            <Button Name="GeneratePassword" Margin="0,0,10px,0" 
+               Command="{Binding GeneratePasswordCommand}" ToolTip="Generate random password"
+               Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+               Height="50px" Width="50px">
+                <materialDesign:PackIcon
+                    Width="30px"
+                    Height="30px"
+                    Kind="AbTesting" />      
+            </Button>
+
+            <Button Name="AddNoteBtn" Margin="0,0,10px,0" 
+               Command="{Binding AddNoteCommand}" ToolTip="Add note"
+               Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+               Height="50px" Width="50px">      
+                <materialDesign:PackIcon
+                    Width="30px"
+                    Height="30px"
+                    Kind="Plus" />
+            </Button>
+        </StackPanel>
     </Grid>
 </Page>

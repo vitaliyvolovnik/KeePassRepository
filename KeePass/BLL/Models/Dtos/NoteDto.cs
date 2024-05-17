@@ -1,10 +1,5 @@
 ﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Models.Dtos
 {
@@ -15,11 +10,11 @@ namespace BLL.Models.Dtos
 
 
         private string? name;
-        public string? Name 
+        public string? Name
         {
             get { return name; }
-            set 
-            { 
+            set
+            {
                 name = value;
                 IsChanged = true;
                 OnPropertyChanged(nameof(Name));
@@ -59,7 +54,7 @@ namespace BLL.Models.Dtos
         public bool IsPasswordChangingEnable
         {
             get { return isPasswordChangingEnable; }
-            set 
+            set
             {
                 isPasswordChangingEnable = value;
                 OnPropertyChanged(nameof(IsPasswordChangingEnable));

@@ -46,7 +46,7 @@ namespace BLL.Services
                 using (CryptoStream cs = new CryptoStream(ms, Aes.CreateEncryptor(), CryptoStreamMode.Write))
                 {
                     cs.Write(planeTextBytes, 0, planeTextBytes.Length);
-                    
+
                 }
                 var txt = Convert.ToBase64String(ms.ToArray());
                 return txt;
@@ -63,10 +63,10 @@ namespace BLL.Services
                 using (CryptoStream cs = new CryptoStream(ms, Aes.CreateDecryptor(), CryptoStreamMode.Write))
                 {
                     cs.Write(ciphertextBytes, 0, ciphertextBytes.Length);
-                    
+
                 }
                 return Encoding.UTF8.GetString(ms.ToArray());
-            }     
+            }
         }
 
         public string HashPassword(string password)

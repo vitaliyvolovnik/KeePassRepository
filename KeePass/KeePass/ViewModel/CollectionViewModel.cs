@@ -2,6 +2,8 @@
 using BLL.Services;
 using Domain.Models;
 using KeePass.Core;
+using KeePass.Domain;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
@@ -185,5 +187,42 @@ namespace KeePass.ViewModel
 
 
         #endregion
+
+
+        #region GenerateRandomPassword
+
+
+        private ICommand generatePasswordCommand;
+        public ICommand GeneratePasswordCommand => generatePasswordCommand ??= new AsyncRelayCommand(generatePasswordExecuteAsync);
+
+        private async Task generatePasswordExecuteAsync(object obj)
+        {
+            var dialog = new PasswordParameterDialog();
+
+            var result = await DialogHost.Show(dialog, "RootDialog");
+
+            if(result != null && (bool)result)
+            {
+
+                var password = PasswordHelper
+                    .GenerateRandomPassword(
+                    dialog.Length,
+                    dialog.UseUppercase,
+                    dialog.UseNumbers,
+                    dialog.UseSpecialSymbols);
+
+                Clipboard.SetText(password);
+            }
+        }
+
+
+        #endregion
     }
+
+
+
+    
 }
+
+
+

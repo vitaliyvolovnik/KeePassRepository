@@ -1,10 +1,8 @@
 ﻿using BLL.Extensions;
 using BLL.Models.Dtos;
 using BLL.Services.Interfaces;
-using DAL.Repositories;
 using DAL.Repositories.Interfaces;
 using Domain.Models;
-using System.Reflection.Metadata.Ecma335;
 
 namespace BLL.Services
 {
@@ -33,8 +31,8 @@ namespace BLL.Services
 
         public async Task ChangeNotePassword(int id, string newPassword)
         {
-            await _noteRepository.UpdateAsync(id, new Note() 
-            { Password = _cryptographyService.Encrypt(newPassword)});
+            await _noteRepository.UpdateAsync(id, new Note()
+            { Password = _cryptographyService.Encrypt(newPassword) });
         }
 
         public async Task DeleteNoteAsync(int id)
@@ -44,7 +42,7 @@ namespace BLL.Services
 
         public async Task<IEnumerable<NoteDto>> GetByCollectionIdAsync(int collectionId)
         {
-            return (await _noteRepository.FindByConditionAsync(x => x.CollectionId == collectionId)).Select(x=>x.ToDto(_cryptographyService));
+            return (await _noteRepository.FindByConditionAsync(x => x.CollectionId == collectionId)).Select(x => x.ToDto(_cryptographyService));
         }
 
         public async Task<NoteDto?> GetNoteAsync(int id)

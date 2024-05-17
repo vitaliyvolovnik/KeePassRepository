@@ -1,5 +1,4 @@
 ﻿using BLL.Models.Dtos;
-using Domain.Models;
 
 namespace BLL.Services.Interfaces
 {

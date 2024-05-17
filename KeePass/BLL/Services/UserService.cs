@@ -1,7 +1,6 @@
 ﻿using BLL.Extensions;
 using BLL.Models.Dtos;
 using BLL.Services.Interfaces;
-using DAL.Repositories;
 using DAL.Repositories.Interfaces;
 using Domain.Models;
 
@@ -21,7 +20,7 @@ namespace BLL.Services
 
         public async Task<UserDto?> ChangePassword(int userId, string newPassword)
         {
-            var user = await _userRepository.UpdateAsync(userId,new User() { MasterPassword = _cryptographyService.HashPassword(newPassword)});
+            var user = await _userRepository.UpdateAsync(userId, new User() { MasterPassword = _cryptographyService.HashPassword(newPassword) });
             return user?.ToDto(_cryptographyService);
         }
 
@@ -33,10 +32,10 @@ namespace BLL.Services
 
         public async Task<UserDto?> RegisterAsync(string password)
         {
-            if(! await _userRepository.isRegisteredAsync())
+            if (!await _userRepository.isRegisteredAsync())
             {
                 var hashedPass = _cryptographyService.HashPassword(password);
-                var user =  await _userRepository.CreateAsync(new User
+                var user = await _userRepository.CreateAsync(new User
                 {
                     MasterPassword = hashedPass
                 });

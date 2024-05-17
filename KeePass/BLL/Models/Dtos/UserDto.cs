@@ -1,9 +1,4 @@
 ﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Models.Dtos
 {
@@ -24,7 +19,7 @@ namespace BLL.Models.Dtos
                 MasterPassword = MasterPassword,
                 Folders = Folders?.Select(x => x.ToEnitty()).ToList(),
             };
-            
+
         }
 
     }

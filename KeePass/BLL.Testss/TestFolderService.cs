@@ -3,7 +3,6 @@ using DAL.Context;
 using DAL.Repositories;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.ObjectModel;
 
 namespace BLL.Testss
@@ -38,7 +37,7 @@ namespace BLL.Testss
         [SetUp]
         public void SetUp()
         {
-            
+
 
             _userRepository.DeleteAllAsync().Wait();
 
@@ -226,7 +225,7 @@ namespace BLL.Testss
             Assert.AreEqual(2, result.Result.Count());
         }
 
-        
+
 
     }
 }

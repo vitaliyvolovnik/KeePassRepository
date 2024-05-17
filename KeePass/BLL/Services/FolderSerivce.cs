@@ -1,7 +1,6 @@
 ﻿using BLL.Extensions;
 using BLL.Models.Dtos;
 using BLL.Services.Interfaces;
-using DAL.Repositories;
 using DAL.Repositories.Interfaces;
 using Domain.Models;
 
@@ -16,7 +15,7 @@ namespace BLL.Services
 
 
         public FolderSerivce(
-            ICollectionRepository collectionRepository, 
+            ICollectionRepository collectionRepository,
             IFolderRepository folderRepository,
             CryptographyService cryptographyService)
         {
@@ -73,7 +72,7 @@ namespace BLL.Services
 
         public async Task<FolderDto?> RenameFolderAsync(int id, string newName)
         {
-            var folder =  await _folderRepository.UpdateAsync(id, new Folder()
+            var folder = await _folderRepository.UpdateAsync(id, new Folder()
             {
                 Name = newName
             });

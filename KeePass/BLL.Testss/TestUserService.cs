@@ -22,7 +22,7 @@ namespace BLL.Testss
 
             KeyPassContext context = new(options);
             _userRepository = new UserRepository(context);
-            _cryptographyService = new CryptographyService("",new User());
+            _cryptographyService = new CryptographyService("", new User());
             _userService = new UserService(_userRepository, _cryptographyService);
             _userRepository.DeleteAllAsync();
         }
@@ -40,7 +40,7 @@ namespace BLL.Testss
             var user = new User { MasterPassword = "oldHashedPassword" };
             user = await _userRepository.CreateAsync(user);
 
-            
+
             // Act
             var result = await _userService.ChangePassword(user.Id, newPassword);
 
@@ -62,7 +62,7 @@ namespace BLL.Testss
             var user = new User { MasterPassword = hashedPassword };
             await _userRepository.CreateAsync(user);
 
-            
+
 
             // Act
             var result = await _userService.LoginAsync(password);

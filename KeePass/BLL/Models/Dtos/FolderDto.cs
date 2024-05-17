@@ -1,10 +1,5 @@
 ﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Models.Dtos
 {
@@ -23,7 +18,7 @@ namespace BLL.Models.Dtos
             {
                 Id = Id,
                 Name = Name,
-                Collections = new ObservableCollection<Collection>(Collections?.Select(x=>x.ToEntity())),
+                Collections = new ObservableCollection<Collection>(Collections?.Select(x => x.ToEntity())),
                 UserId = UserId
             };
         }

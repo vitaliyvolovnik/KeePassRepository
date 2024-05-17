@@ -1,10 +1,5 @@
 ﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Models.Dtos
 {
@@ -20,11 +15,11 @@ namespace BLL.Models.Dtos
 
         public Collection ToEntity()
         {
-            return new Collection() 
-            { 
-                Id = Id, 
-                Name = Name, 
-                Notes = new ObservableCollection<Note>(Notes.Select(x => x.ToEntity())), 
+            return new Collection()
+            {
+                Id = Id,
+                Name = Name,
+                Notes = new ObservableCollection<Note>(Notes.Select(x => x.ToEntity())),
                 Folder = Folder?.ToEntity(),
                 FolderId = FolderId
             };

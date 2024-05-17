@@ -1,10 +1,5 @@
 ﻿using BLL.Services;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Testss
 {
@@ -19,7 +14,7 @@ namespace BLL.Testss
 
             var user = new User();
             user.MasterPassword = "fjdkasf828u3jfidsuf823";
-            var service = new CryptographyService("_fdahjkfdkasjl",user);
+            var service = new CryptographyService("_fdahjkfdkasjl", user);
 
             //act
             var encryptPass = service.Encrypt("Qwerty123!");
